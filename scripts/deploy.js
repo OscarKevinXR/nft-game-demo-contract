@@ -1,4 +1,5 @@
 // npx hardhat run scripts/deploy.js --network rinkeby
+// Contract deployed to: 0xDd474C079DBC4ef1712403Dd9d8167daa8b80590
 const main = async () => {
   const gameContractFactory = await hre.ethers.getContractFactory('MyEpicGame');
   const gameContract = await gameContractFactory.deploy(                     
@@ -13,37 +14,10 @@ const main = async () => {
     10000, // Boss hp
     50 // Boss attack damage
   );
+
   await gameContract.deployed();
   console.log("Contract deployed to:", gameContract.address);
 
-  
-  // let txn;
-  // txn = await gameContract.mintCharacterNFT(0);
-  // await txn.wait();
-  // console.log("Minted NFT #1");
-
-  // txn = await gameContract.mintCharacterNFT(1);
-  // await txn.wait();
-  // console.log("Minted NFT #2");
-
-  // txn = await gameContract.mintCharacterNFT(2);
-  // await txn.wait();
-  // console.log("Minted NFT #3");
-
-  // console.log("Done deploying and minting!");
-
-  // Test Boss Attack 
-  let txn;
-  txn = await gameContract.mintCharacterNFT(2);
-  await txn.wait();
-  
-  txn = await gameContract.attackBoss();
-  await txn.wait();
-  
-  txn = await gameContract.attackBoss();
-  await txn.wait();
-
-  console.log("Done!");
 };
 
 const runMain = async () => {

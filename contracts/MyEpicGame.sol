@@ -26,6 +26,9 @@ contract MyEpicGame is ERC721 {
     uint attackDamage;
   }
 
+  event CharacterNFTMinted(address sender, uint256 tokenId, uint256 characterIndex);
+  event AttackComplete(uint newBossHp, uint newPlayerHp);
+
   // The tokenId is the NFTs unique identifier, it's just a number that goes
   // 0, 1, 2, 3, etc.
   using Counters for Counters.Counter;
@@ -124,6 +127,10 @@ contract MyEpicGame is ERC721 {
 
     // Increment the tokenId for the next person that uses it.
     _tokenIds.increment();
+
+    // The first event, CharacterNFTMinted we're going to fire when we finish minting an NFT for our user! 
+    // This will allow us to notify them when we're done minting the NFT!
+    emit CharacterNFTMinted(msg.sender, newItemId, _characterIndex);
   }
 
   function tokenURI(uint256 _tokenId) public view override returns (string memory) {
@@ -193,6 +200,31 @@ contract MyEpicGame is ERC721 {
     // Console for ease.
     console.log("Boss attacked player. New player hp: %s\n", player.hp);
 
+    // Notify user that attack has been completed successfully
+    emit AttackComplete(bigBoss.hp, player.hp);
   }
   
+  function checkIfUserHasNFT() public view returns (CharacterAttributes memory) {
+  // Get the tokenId of the user's character NFT
+  uint256 userNftTokenId = nftHolders[msg.sender];
+    // If the user has a tokenId in the map, return their character.
+    if (userNftTokenId > 0) {
+      return nftHolderAttributes[userNftTokenId];
+    }
+    // Else, return an empty character.
+    else {
+      CharacterAttributes memory emptyStruct;
+      return emptyStruct;
+    }
+  }
+
+  // Our web app is going to have a "character select screen" for new players so they can choose which character NFT they want to mint!
+  function getAllDefaultCharacters() public view returns (CharacterAttributes[] memory) {
+  return defaultCharacters;
+  }
+
+  // We need to be able to retrieve the boss. Why? Well — when our player is playing the game our app will need to be able to show them stuff like the boss's HP, name, image, etc!
+  function getBigBoss() public view returns (BigBoss memory) {
+    return bigBoss;
+  }
 }
