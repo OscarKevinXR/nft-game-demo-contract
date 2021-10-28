@@ -1,5 +1,5 @@
 // npx hardhat run scripts/deploy.js --network rinkeby
-// Contract deployed to: 0xDd474C079DBC4ef1712403Dd9d8167daa8b80590
+// Contract deployed to: 0x3C2755976C156b0891e9Dd2F194ae9100371520d
 const main = async () => {
   const gameContractFactory = await hre.ethers.getContractFactory('MyEpicGame');
   const gameContract = await gameContractFactory.deploy(                     
